@@ -3,6 +3,7 @@
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Pdf } from "../../components";
 
 const defaultProps = {};
 const propTypes = {};
@@ -15,9 +16,9 @@ class GenerateRoomView extends Component {
   render() {
     return (
       <div>
-        <input type="text" />
-        <button>Create</button>
-        This is Default Redux Page
+        <div name="pdf_rect">
+          <Pdf />
+        </div>
       </div>
     );
   }
