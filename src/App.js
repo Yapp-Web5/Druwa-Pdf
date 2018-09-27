@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { GenerateRoomView, MainView } from "./views";
+import { GenerateRoomView, MainView, WaitRoom } from "./views";
 
 const mapStateToProps = state => {
   return {};
@@ -19,6 +19,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={MainView} />
           <Route path="/create" component={GenerateRoomView} />
+          <Route path="/wait" component={WaitRoom} />
         </Switch>
       </div>
     );

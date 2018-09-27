@@ -1,0 +1,13 @@
+@import "../../consts/colors.scss";
+@import "../../consts/variables.scss";
+
+.body {
+  width: 100%;
+  height: 100%;
+  background: $light-gray;
+}
+.create {
+  width: 50%;
+  height: auto;
+  background: $white;
+}
