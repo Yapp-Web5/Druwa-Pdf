@@ -1,0 +1,19 @@
+@import "../../consts/colors.scss";
+@import "../../consts/variables.scss";
+
+.pdf_view {
+  width: fit-content;
+}
+.information_rect {
+  width: 50%;
+  background: $black;
+}
+.pdf_moverect {
+  width: 50%;
+  background: $white;
+}
+.left {
+  width: fit-content;
+  background: $white;
+  float: left;
+}
