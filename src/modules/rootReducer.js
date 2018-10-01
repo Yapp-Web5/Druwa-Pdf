@@ -1,5 +1,8 @@
 import { combineReducers } from "redux";
+import createroom from "./createroom";
 
-const reducers = combineReducers({});
+const reducers = combineReducers({
+  createroom
+});
 
 export default reducers;

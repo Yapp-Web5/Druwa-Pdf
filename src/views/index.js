@@ -1,5 +1,5 @@
 import GenerateRoomView from "./GenerateRoomView/GenerateRoomView";
 import MainView from "./MainView/MainView";
-import WaitRoom from "./WaitRoom/WaitRoom";
+import CreateRoom from "./CreateRoom/CreateRoom";
 
-export { GenerateRoomView, MainView, WaitRoom };
+export { GenerateRoomView, MainView, CreateRoom };
