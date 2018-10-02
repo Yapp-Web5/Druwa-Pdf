@@ -68,13 +68,15 @@ class CreateRoom extends Component {
   /**
    * 관리자가 생성/수정 버튼 클릭 시 발생하는 fn
    */
-  handleUpload = () => {
+  handleUpload = event => {
+    event.preventDefault();
+    const { files, title, writer, password, updateRoomId } = this.state;
     console.log("업로드 버튼");
-    const { files, title, writer, password } = this.state;
 
-    if (!files || !title || !writer) {
+    //파일 업로드->제목->작성자 순으로 focus 이동시켜 버리기
+    if (files.length < 1 || !title || !writer) {
       let strBuffer = "";
-      strBuffer += !files ? "파일 업로드 " : "";
+      strBuffer += files.length < 1 ? "파일 업로드 " : "";
       strBuffer += !title ? "제목 " : "";
       strBuffer += !writer ? "작성자 " : "";
       strBuffer += " 입력하세요.";
@@ -89,10 +91,17 @@ class CreateRoom extends Component {
     formData.append("writer", writer);
     formData.append("password", password);
 
-    this.props.setRoom(formData).then(() => {
-      if (this.props.status === "SUCCEED_CREATE_ROOM")
-        this.setState({ isDone: true });
-    });
+    if (updateRoomId) {
+      this.props.updateRoom(formData).then(() => {
+        if (this.props.status === "SUCCEED_UPDATE_ROOM")
+          this.setState({ isDone: true });
+      });
+    } else {
+      this.props.setRoom(formData).then(() => {
+        if (this.props.status === "SUCCEED_CREATE_ROOM")
+          this.setState({ isDone: true });
+      });
+    }
   };
 
   /**
@@ -100,6 +109,8 @@ class CreateRoom extends Component {
    *name property에 따른 code 분기
    */
   handleOnChange = event => {
+    event.preventDefault();
+
     var comp = event.target.name;
     switch (comp) {
       case "title":
@@ -119,7 +130,8 @@ class CreateRoom extends Component {
   /**
    * 사용자가 취소 버튼 시 뒤로가기 동작 fn
    */
-  canclePage = () => {
+  cancelPage = event => {
+    event.preventDefault();
     this.props.history.push("/");
     console.log("취소동작");
   };
@@ -129,12 +141,20 @@ class CreateRoom extends Component {
    */
   submitform = () => {
     return (
-      <div name="submitform">
-        <button name="btn_ok" onClick={this.handleUpload}>
-          생성
-        </button>
-        <button name="btn_cancle" onClick={this.canclePage}>
+      <div className={styles.submitForm} name="submitform">
+        <button
+          className={styles.submitForm_cancel}
+          name="btn_cancel"
+          onClick={this.cancelPage}
+        >
           취소
+        </button>
+        <button
+          className={styles.submitForm_ok}
+          name="btn_ok"
+          onClick={this.handleUpload}
+        >
+          확인
         </button>
       </div>
     );
@@ -145,28 +165,40 @@ class CreateRoom extends Component {
    */
   inputform = () => {
     return (
-      <div name="inputform">
-        <input
-          name="title"
-          type="text"
-          value={this.state.title}
-          onChange={this.handleOnChange}
-          placeholder="방 이름"
-        />
-        <input
-          name="writer"
-          type="text"
-          value={this.state.writer}
-          onChange={this.handleOnChange}
-          placeholder="작성자"
-        />
-        <input
-          name="password"
-          type="password"
-          value={this.state.password}
-          onChange={this.handleOnChange}
-          placeholder="비밀번호"
-        />
+      <div className={styles.inputForm} name="inputform">
+        <div className={styles.inputForm_titleRect}>
+          <p className={styles.inputForm_titleRect_left}>방 이름 :</p>
+          <input
+            className={styles.inputForm_title}
+            name="title"
+            type="text"
+            value={this.state.title}
+            onChange={this.handleOnChange}
+            placeholder="방 이름"
+          />
+        </div>
+        <div className={styles.inputForm_writerRect}>
+          <p className={styles.inputForm_titleRect_left}>강연자 이름 :</p>
+          <input
+            className={styles.iputForm_writer}
+            name="writer"
+            type="text"
+            value={this.state.writer}
+            onChange={this.handleOnChange}
+            placeholder="작성자"
+          />
+        </div>
+        <div className={styles.inputForm_passwordRect}>
+          <p className={styles.inputForm_titleRect_left}>비밀번호 :</p>
+          <input
+            className={styles.inputForm_password}
+            name="password"
+            type="password"
+            value={this.state.password}
+            onChange={this.handleOnChange}
+            placeholder="비밀번호"
+          />
+        </div>
       </div>
     );
   };
@@ -176,24 +208,22 @@ class CreateRoom extends Component {
    */
   uploadform = () => {
     return (
-      <section>
-        <div className="dropzone">
-          <Dropzone onDrop={this.onDrop.bind(this)} accept=".pdf">
-            <p>
-              Try dropping some files here, or click to select files to upload.
+      <section className={styles.uploadForm}>
+        <div className={styles.uploadForm_Rect}>
+          <Dropzone
+            className={styles.uploadForm_Rect_Dropzone}
+            onDrop={this.onDrop.bind(this)}
+            accept=".pdf"
+            multiple={false}
+          >
+            <p className={styles.uploadForm_Rect_Content}>
+              {this.state.files.length > 0 && this.state.files.map(f => f.name)}
+              {this.state.files.length > 0 && <br />}
+              파일을 첨부해주세요 !<br />
+              Drag and Drop or Click !
             </p>
           </Dropzone>
         </div>
-        <aside>
-          <h2>Dropped files</h2>
-          <ul>
-            {this.state.files.map(f => (
-              <li key={f.name}>
-                {f.name} - {f.size} bytes
-              </li>
-            ))}
-          </ul>
-        </aside>
       </section>
     );
   };
@@ -206,14 +236,24 @@ class CreateRoom extends Component {
     );
 
     return (
-      <div>
+      <div className={styles.root}>
         <div name="head">{redirect}</div>
-        <div name="body">
-          <div name="upload_rect">
-            {this.uploadform()}
-            <div name="input_rect">{this.inputform()}</div>
+        <div className={styles.body} name="body">
+          <div className={styles.body_container} name="body_container">
+            <div className={styles.body_container_left}>
+              <div className={styles.uploadRect} name="upload_rect">
+                {this.uploadform()}
+              </div>
+            </div>
+            <div className={styles.body_container_right}>
+              <div className={styles.inputRect} name="input_rect">
+                {this.inputform()}
+              </div>
+              <div className={styles.submitRect} name="submit_rect">
+                {this.submitform()}
+              </div>
+            </div>
           </div>
-          <div name="submit_rect">{this.submitform()}</div>
         </div>
       </div>
     );

@@ -1,4 +1,4 @@
-import * as DefaultAPI from "../api/_defaultAPI";
+import * as createRoomAPI from "../api/createRoomAPI";
 
 const DefaultAction = {
   START_CREATE_ROOM: "START_CREATE_ROOM",
@@ -31,7 +31,8 @@ export const getAdmin = roomId => dispatch => {
   //요청 시작
   dispatch({ type: DefaultAction.START_GET_ADMIN });
 
-  return DefaultAPI.get_admin(roomId)
+  return createRoomAPI
+    .get_admin(roomId)
     .then(Response => {
       dispatch({
         type: DefaultAction.SUCCEED_GET_ADMIN,
@@ -52,7 +53,8 @@ export const getRoom = roomId => dispatch => {
   //요청 시작
   dispatch({ type: DefaultAction.START_GET_ROOM });
 
-  return DefaultAPI.get_room(roomId)
+  return createRoomAPI
+    .get_room(roomId)
     .then(Response => {
       dispatch({
         type: DefaultAction.SUCCEED_GET_ROOM,
@@ -73,7 +75,8 @@ export const setRoom = data => dispatch => {
   //요청 시작
   dispatch({ type: DefaultAction.START_CREATE_ROOM });
   console.log(data);
-  return DefaultAPI.set_room(data)
+  return createRoomAPI
+    .set_room(data)
     .then(Response => {
       dispatch({
         type: DefaultAction.SUCCEED_CREATE_ROOM,
@@ -94,7 +97,8 @@ export const updateRoom = data => dispatch => {
   //요청 시작
   dispatch({ type: DefaultAction.START_UPDATE_ROOM });
 
-  return DefaultAPI.update_room(data)
+  return createRoomAPI
+    .update_room(data)
     .then(Response => {
       dispatch({
         type: DefaultAction.SUCCEED_UPDATE_ROOM,
