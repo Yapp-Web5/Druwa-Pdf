@@ -27,93 +27,101 @@ const initialState = {
   }
 };
 
-export const getAdmin = roomId => dispatch => {
-  //요청 시작
-  dispatch({ type: DefaultAction.START_GET_ADMIN });
+/**
+ * @author AnGwangHo
+ * @returns arrays[]
+ * @throws error:404
+ * @param {roomId} roomId
+ * 방의 관리자 리스트를 얻어오는 Get 함수
+ */
+export function getAdmin(roomId) {
+  return async dispatch => {
+    try {
+      //요청 시작
+      dispatch({ type: DefaultAction.START_GET_ADMIN });
 
-  return createRoomAPI
-    .get_admin(roomId)
-    .then(Response => {
+      //RoomId를 기준으로 Admin List 획득
+      const data = await createRoomAPI.get_admin(roomId);
       dispatch({
         type: DefaultAction.SUCCEED_GET_ADMIN,
         payload: {
-          Response
+          data
         }
       });
-    })
-    .catch(error => {
+    } catch (error) {
       dispatch({
         type: DefaultAction.FAILED_GET_ADMIN,
         payload: error
       });
-    });
-};
+    }
+  };
+}
 
-export const getRoom = roomId => dispatch => {
-  //요청 시작
-  dispatch({ type: DefaultAction.START_GET_ROOM });
+export function getRoom(roomId) {
+  return async dispatch => {
+    try {
+      dispatch({ type: DefaultAction.START_GET_ROOM });
 
-  return createRoomAPI
-    .get_room(roomId)
-    .then(Response => {
+      const data = await createRoomAPI.get_room(roomId);
+
       dispatch({
         type: DefaultAction.SUCCEED_GET_ROOM,
         payload: {
-          Response
+          data
         }
       });
-    })
-    .catch(error => {
+    } catch (error) {
       dispatch({
         type: DefaultAction.FAILED_GET_ROOM,
         payload: error
       });
-    });
-};
+    }
+  };
+}
 
-export const setRoom = data => dispatch => {
-  //요청 시작
-  dispatch({ type: DefaultAction.START_CREATE_ROOM });
-  console.log(data);
-  return createRoomAPI
-    .set_room(data)
-    .then(Response => {
+export function setRoom(formdata) {
+  return async dispatch => {
+    try {
+      //요청 시작
+      dispatch({ type: DefaultAction.START_CREATE_ROOM });
+
+      const data = await createRoomAPI.set_room(formdata);
+
       dispatch({
         type: DefaultAction.SUCCEED_CREATE_ROOM,
         payload: {
-          Response
+          data
         }
       });
-    })
-    .catch(error => {
+    } catch (error) {
       dispatch({
         type: DefaultAction.FAILED_CREATE_ROOM,
         payload: error
       });
-    });
-};
+    }
+  };
+}
 
-export const updateRoom = data => dispatch => {
-  //요청 시작
-  dispatch({ type: DefaultAction.START_UPDATE_ROOM });
+export function updateRoom(formData) {
+  return async dispatch => {
+    try {
+      dispatch({ type: DefaultAction.START_UPDATE_ROOM });
 
-  return createRoomAPI
-    .update_room(data)
-    .then(Response => {
+      const data = await createRoomAPI.update_room(formData);
       dispatch({
         type: DefaultAction.SUCCEED_UPDATE_ROOM,
         payload: {
-          Response
+          data
         }
       });
-    })
-    .catch(error => {
+    } catch (error) {
       dispatch({
         type: DefaultAction.FAILED_UPDATE_ROOM,
         payload: error
       });
-    });
-};
+    }
+  };
+}
 
 //리듀서 방출
 /** 추후 status 응답코드 숫자로 변경 */
