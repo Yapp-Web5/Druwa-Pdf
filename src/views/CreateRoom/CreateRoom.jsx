@@ -29,26 +29,28 @@ class CreateRoom extends Component {
     title: "",
     writer: "",
     password: "",
-    isDone: false
+    isDone: false,
+    isUpdate: false
   };
 
   componentDidMount() {
-    const { updateRoomId } = this.props;
-    console.log("업데이트 인가?[" + updateRoomId + "]");
+    const { roomId } = this.props.match.params;
+    console.log("업데이트 인가?[" + roomId + "]");
 
     //Room 정보 Update할 경우
-    if (updateRoomId) {
+    if (roomId) {
       //1. User Token이 Master인지 조회
-      this.props.getAdmin(updateRoomId);
+      this.props.getAdmin(roomId);
 
       if (this.props.data.admin) {
         //2. Room 정보 가져와서 셋팅
-        this.props.getRoom(updateRoomId).then(() => {
+        this.props.getRoom(roomId).then(() => {
           this.setState({
             files: this.props.data.files,
             title: this.props.data.title,
             writer: this.props.data.writer,
-            password: this.props.data.password
+            password: this.props.data.password,
+            isUpdate: true
           });
         });
       }
@@ -70,8 +72,7 @@ class CreateRoom extends Component {
    */
   handleUpload = event => {
     event.preventDefault();
-    const { files, title, writer, password, updateRoomId } = this.state;
-    console.log("업로드 버튼");
+    const { files, title, writer, password, isUpdate } = this.state;
 
     //파일 업로드->제목->작성자 순으로 focus 이동시켜 버리기
     if (files.length < 1 || !title || !writer) {
@@ -91,7 +92,7 @@ class CreateRoom extends Component {
     formData.append("writer", writer);
     formData.append("password", password);
 
-    if (updateRoomId) {
+    if (isUpdate) {
       this.props.updateRoom(formData).then(() => {
         if (this.props.status === "SUCCEED_UPDATE_ROOM")
           this.setState({ isDone: true });
@@ -215,6 +216,7 @@ class CreateRoom extends Component {
             onDrop={this.onDrop.bind(this)}
             accept=".pdf"
             multiple={false}
+            disabled={!this.state.isUpdate}
           >
             <p className={styles.uploadForm_Rect_Content}>
               {this.state.files.length > 0 && this.state.files.map(f => f.name)}
