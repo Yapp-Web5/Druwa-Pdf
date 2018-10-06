@@ -3,6 +3,7 @@
 
 .pdf_view {
   width: 50%;
+  margin: 0px;
   &_full {
     width: 50%;
     margin: auto;
@@ -12,9 +13,6 @@
 .information_rect {
   width: 50%;
   background: $black;
-}
-.pdf_moverect {
-  width: 50%;
 }
 .pdf_bottom {
   width: 50%;
@@ -52,8 +50,8 @@
   }
   &_index {
     width: fit-content;
-    padding-left: 30%;
-    padding-right: 30%;
+    padding-left: 30px;
+    padding-right: 30px;
   }
   &_prev {
     width: 30px;
