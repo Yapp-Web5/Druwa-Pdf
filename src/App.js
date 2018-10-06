@@ -19,7 +19,8 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={MainView} />
           <Route exact path="/room" component={GenerateRoomView} />
-          <Route path="/room/:roomId" component={CreateRoom} />
+          <Route path="/create/:roomId" component={CreateRoom} />
+          <Route path="/create" component={CreateRoom} />
         </Switch>
       </div>
     );

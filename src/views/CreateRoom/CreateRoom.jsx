@@ -34,7 +34,7 @@ class CreateRoom extends Component {
   };
 
   componentDidMount() {
-    const { roomId } = this.props.match.params;
+    const roomId = this.props.match.params.roomId;
     console.log("업데이트 인가?[" + roomId + "]");
 
     //Room 정보 Update할 경우
@@ -216,7 +216,7 @@ class CreateRoom extends Component {
             onDrop={this.onDrop.bind(this)}
             accept=".pdf"
             multiple={false}
-            disabled={!this.state.isUpdate}
+            disabled={this.state.isUpdate}
           >
             <p className={styles.uploadForm_Rect_Content}>
               {this.state.files.length > 0 && this.state.files.map(f => f.name)}
